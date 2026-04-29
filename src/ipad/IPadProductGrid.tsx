@@ -38,48 +38,57 @@ export default function IPadProductGrid({ category, onProductSelect }: Props) {
   if (products.length === 0) {
     return (
       <div className="flex items-center justify-center h-full">
-        <p className="text-white/40 text-lg">Chưa có sản phẩm trong danh mục này</p>
+        <p className="text-gray-500 text-lg">Chưa có sản phẩm trong danh mục này</p>
       </div>
     );
   }
 
   return (
     <div className="h-full overflow-y-auto p-3">
-      <div className="grid grid-cols-4 gap-3">
+      <div className="grid grid-cols-4 gap-4">
         {products.map(product => (
           <button
             key={product.id}
             onClick={() => onProductSelect(product)}
-            className="bg-[#122040] rounded-xl overflow-hidden active:scale-95 transition-transform text-left group"
+            className="bg-[#fcf9f5] border border-gray-100 rounded-xl overflow-hidden active:scale-95 transition-transform text-left flex flex-col"
           >
-            <div className="aspect-square overflow-hidden bg-[#0a1628] relative">
+            <div className="w-full aspect-[2.5/1] bg-gray-100 relative">
               {product.thumbnail_url ? (
                 <img
                   src={product.thumbnail_url}
                   alt={product.name}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  className="w-full h-full object-cover"
                 />
               ) : (
-                <div className="w-full h-full flex items-center justify-center text-white/20 text-4xl">
+                <div className="w-full h-full flex items-center justify-center text-gray-300 text-3xl">
                   💎
                 </div>
               )}
               {product.stock_status === 'out_of_stock' && (
-                <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
-                  <span className="text-red-400 font-semibold text-sm bg-black/60 px-3 py-1 rounded-full">
+                <div className="absolute inset-0 bg-white/80 text-gray-800 flex items-center justify-center">
+                  <span className="text-red-400 font-semibold text-[10px] bg-white/80 px-2 py-0.5 rounded-full">
                     Hết hàng
                   </span>
                 </div>
               )}
             </div>
-            <div className="p-2.5">
-              <p className="text-white text-xs font-medium truncate">{product.name}</p>
-              <p className="text-white/40 text-[10px] mt-0.5">{product.code}</p>
-              {product.listed_price > 0 && (
-                <p className="text-[#c9a84c] text-xs font-semibold mt-1">
-                  {formatCurrency(product.listed_price)}
+            
+            <div className="p-3 flex flex-col flex-1">
+              <h3 className="text-gray-900 font-semibold text-sm leading-tight mb-1 line-clamp-1">{product.name}</h3>
+              {product.description && (
+                <p className="text-gray-500 text-[10px] line-clamp-2 leading-relaxed mb-1.5">
+                  {product.description}
                 </p>
               )}
+              
+              <div className="mt-auto flex items-end justify-between">
+                <div></div>
+                {product.listed_price > 0 && (
+                  <p className="text-[#b08d3a] text-xs font-bold ml-auto">
+                    {formatCurrency(product.listed_price)}
+                  </p>
+                )}
+              </div>
             </div>
           </button>
         ))}

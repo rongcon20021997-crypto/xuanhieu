@@ -63,9 +63,9 @@ export default function AdminDashboard({ user }: Props) {
 
   const colorMap: Record<string, string> = {
     blue: 'bg-blue-500/10 text-blue-400',
-    emerald: 'bg-emerald-500/10 text-emerald-400',
+    emerald: 'bg-emerald-100 text-emerald-600',
     red: 'bg-red-500/10 text-red-400',
-    amber: 'bg-amber-500/10 text-amber-400',
+    amber: 'bg-amber-100 text-amber-600',
     violet: 'bg-violet-500/10 text-violet-400',
     cyan: 'bg-cyan-500/10 text-cyan-400',
   };
@@ -73,45 +73,45 @@ export default function AdminDashboard({ user }: Props) {
   return (
     <div className="p-8">
       <div className="mb-8">
-        <h1 className="text-2xl font-bold text-white">Xin chào, {user.name}!</h1>
-        <p className="text-slate-400 mt-1">Tổng quan hệ thống hôm nay</p>
+        <h1 className="text-2xl font-bold text-slate-800">Xin chào, {user.name}!</h1>
+        <p className="text-slate-500 mt-1">Tổng quan hệ thống hôm nay</p>
       </div>
 
       {/* Revenue card */}
       {(user.role === 'admin' || user.role === 'accountant') && (
         <div className="bg-gradient-to-r from-amber-500/20 to-amber-600/10 border border-amber-500/20 rounded-2xl p-6 mb-6">
-          <p className="text-amber-400/70 text-sm font-medium mb-1">Tổng doanh thu</p>
-          <p className="text-amber-400 text-4xl font-bold">{formatCurrency(stats.totalRevenue)}</p>
+          <p className="text-amber-600/70 text-sm font-medium mb-1">Tổng doanh thu</p>
+          <p className="text-amber-600 text-4xl font-bold">{formatCurrency(stats.totalRevenue)}</p>
         </div>
       )}
 
       {/* Stats grid */}
       <div className="grid grid-cols-3 gap-4 mb-8">
         {cards.map(card => (
-          <div key={card.label} className="bg-slate-900 border border-slate-800 rounded-2xl p-5">
+          <div key={card.label} className="bg-white shadow-sm border border-slate-200 rounded-2xl p-5">
             <div className={`w-10 h-10 rounded-xl ${colorMap[card.color]} flex items-center justify-center mb-3`}>
               {card.icon}
             </div>
-            <p className="text-3xl font-bold text-white">{card.value}</p>
-            <p className="text-slate-400 text-sm mt-1">{card.label}</p>
+            <p className="text-3xl font-bold text-slate-800">{card.value}</p>
+            <p className="text-slate-500 text-sm mt-1">{card.label}</p>
           </div>
         ))}
       </div>
 
       {/* Recent quotations */}
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6">
-        <h2 className="text-white font-semibold mb-4">Báo giá gần đây</h2>
+      <div className="bg-white shadow-sm border border-slate-200 rounded-2xl p-6">
+        <h2 className="text-slate-800 font-semibold mb-4">Báo giá gần đây</h2>
         {recentQuotations.length === 0 ? (
           <p className="text-slate-500 text-sm">Chưa có báo giá nào</p>
         ) : (
           <div className="space-y-3">
             {recentQuotations.map(q => (
-              <div key={q.id} className="flex items-center justify-between py-2 border-b border-slate-800 last:border-0">
+              <div key={q.id} className="flex items-center justify-between py-2 border-b border-slate-200 last:border-0">
                 <div>
-                  <p className="text-amber-400/70 text-xs font-mono">{q.quotation_code}</p>
-                  <p className="text-white text-sm mt-0.5">{q.products?.name ?? '—'}</p>
+                  <p className="text-amber-600/70 text-xs font-mono">{q.quotation_code}</p>
+                  <p className="text-slate-800 text-sm mt-0.5">{q.products?.name ?? '—'}</p>
                 </div>
-                <p className="text-amber-400 font-semibold">{formatCurrency(q.final_price)}</p>
+                <p className="text-amber-600 font-semibold">{formatCurrency(q.final_price)}</p>
               </div>
             ))}
           </div>

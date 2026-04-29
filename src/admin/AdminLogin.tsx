@@ -37,32 +37,32 @@ export default function AdminLogin({ onLogin }: Props) {
   }
 
   return (
-    <div className="min-h-screen bg-slate-950 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4">
       <div className="w-full max-w-md">
         <div className="text-center mb-8 flex flex-col items-center">
-          <div className="w-24 h-24 mb-4 bg-slate-900 rounded-2xl flex items-center justify-center p-2 border border-slate-800 shadow-xl">
+          <div className="w-24 h-24 mb-4 bg-white shadow-sm rounded-2xl flex items-center justify-center p-2 border border-slate-200 shadow-xl">
             <img src="/logoxuanhieu.png" alt="Xuân Hiếu Logo" className="w-full h-full object-contain" />
           </div>
-          <h1 className="text-2xl font-bold text-white">Xuân Hiếu Jewelry</h1>
-          <p className="text-slate-400 mt-1 text-sm">Hệ thống quản trị cửa hàng</p>
+          <h1 className="text-2xl font-bold text-slate-800">Xuân Hiếu Jewelry</h1>
+          <p className="text-slate-500 mt-1 text-sm">Hệ thống quản trị cửa hàng</p>
         </div>
 
-        <div className="bg-slate-900 rounded-2xl p-8 border border-slate-800">
-          <h2 className="text-white font-semibold text-lg mb-6">Đăng nhập</h2>
+        <div className="bg-white shadow-sm rounded-2xl p-8 border border-slate-200">
+          <h2 className="text-slate-800 font-semibold text-lg mb-6">Đăng nhập</h2>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="text-slate-400 text-sm block mb-1.5">Email</label>
+              <label className="text-slate-500 text-sm block mb-1.5">Email</label>
               <input
                 type="email"
                 value={email}
                 onChange={e => setEmail(e.target.value)}
                 placeholder="admin@xuanhieu.vn"
                 required
-                className="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-amber-500 transition-colors"
+                className="w-full bg-white border border-slate-300 rounded-xl px-4 py-3 text-slate-800 text-sm focus:outline-none focus:border-amber-500 transition-colors"
               />
             </div>
             <div>
-              <label className="text-slate-400 text-sm block mb-1.5">Mật khẩu</label>
+              <label className="text-slate-500 text-sm block mb-1.5">Mật khẩu</label>
               <div className="relative">
                 <input
                   type={showPass ? 'text' : 'password'}
@@ -70,12 +70,12 @@ export default function AdminLogin({ onLogin }: Props) {
                   onChange={e => setPassword(e.target.value)}
                   placeholder="••••••••"
                   required
-                  className="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-amber-500 transition-colors pr-12"
+                  className="w-full bg-white border border-slate-300 rounded-xl px-4 py-3 text-slate-800 text-sm focus:outline-none focus:border-amber-500 transition-colors pr-12"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPass(!showPass)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-600"
                 >
                   {showPass ? <EyeOff size={18} /> : <Eye size={18} />}
                 </button>
@@ -93,14 +93,14 @@ export default function AdminLogin({ onLogin }: Props) {
             </button>
           </form>
 
-          <div className="mt-6 p-4 bg-slate-800/50 rounded-xl">
+          <div className="mt-6 p-4 bg-slate-50 rounded-xl">
             <p className="text-slate-500 text-xs font-medium mb-2 uppercase tracking-wide">Tài khoản demo</p>
             <div className="space-y-1">
               {DEMO_USERS.map(u => (
                 <button
                   key={u.id}
                   onClick={() => { setEmail(u.email); setPassword(u.password); }}
-                  className="w-full text-left text-xs text-slate-400 hover:text-slate-200 py-1 transition-colors"
+                  className="w-full text-left text-xs text-slate-500 hover:text-slate-700 py-1 transition-colors"
                 >
                   <span className="text-amber-500/70">{u.role}</span> — {u.email} / {u.password}
                 </button>

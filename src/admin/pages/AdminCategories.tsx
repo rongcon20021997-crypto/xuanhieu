@@ -49,8 +49,8 @@ export default function AdminCategories() {
     <div className="p-8">
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-2xl font-bold text-white">Danh mục sản phẩm</h1>
-          <p className="text-slate-400 text-sm mt-1">{categories.length} danh mục</p>
+          <h1 className="text-2xl font-bold text-slate-800">Danh mục sản phẩm</h1>
+          <p className="text-slate-500 text-sm mt-1">{categories.length} danh mục</p>
         </div>
         <button
           onClick={openCreate}
@@ -66,10 +66,10 @@ export default function AdminCategories() {
           <div className="w-8 h-8 border-2 border-amber-500 border-t-transparent rounded-full animate-spin" />
         </div>
       ) : (
-        <div className="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden">
+        <div className="bg-white shadow-sm border border-slate-200 rounded-2xl overflow-hidden">
           <table className="w-full">
             <thead>
-              <tr className="border-b border-slate-800">
+              <tr className="border-b border-slate-200">
                 <th className="text-left text-slate-500 text-xs uppercase tracking-wide px-6 py-4 font-medium w-8" />
                 <th className="text-left text-slate-500 text-xs uppercase tracking-wide px-6 py-4 font-medium">Tên danh mục</th>
                 <th className="text-left text-slate-500 text-xs uppercase tracking-wide px-6 py-4 font-medium">Thứ tự</th>
@@ -79,7 +79,7 @@ export default function AdminCategories() {
             </thead>
             <tbody>
               {categories.map(cat => (
-                <tr key={cat.id} className="border-b border-slate-800/50 hover:bg-slate-800/30 transition-colors">
+                <tr key={cat.id} className="border-b border-slate-200 hover:bg-slate-50 transition-colors">
                   <td className="px-4 py-4">
                     <GripVertical size={16} className="text-slate-600" />
                   </td>
@@ -88,22 +88,22 @@ export default function AdminCategories() {
                       {cat.image_url && (
                         <img src={cat.image_url} alt="" className="w-10 h-10 rounded-lg object-cover" />
                       )}
-                      <span className="text-white font-medium">{cat.name}</span>
+                      <span className="text-slate-800 font-medium">{cat.name}</span>
                     </div>
                   </td>
-                  <td className="px-6 py-4 text-slate-400 text-sm">{cat.sort_order}</td>
+                  <td className="px-6 py-4 text-slate-500 text-sm">{cat.sort_order}</td>
                   <td className="px-6 py-4">
-                    <span className={`inline-flex items-center gap-1.5 text-xs px-2.5 py-1 rounded-full font-medium ${cat.is_active ? 'bg-emerald-500/10 text-emerald-400' : 'bg-slate-700 text-slate-400'}`}>
+                    <span className={`inline-flex items-center gap-1.5 text-xs px-2.5 py-1 rounded-full font-medium ${cat.is_active ? 'bg-emerald-100 text-emerald-600' : 'bg-slate-100 text-slate-500'}`}>
                       <span className={`w-1.5 h-1.5 rounded-full ${cat.is_active ? 'bg-emerald-400' : 'bg-slate-500'}`} />
                       {cat.is_active ? 'Hiển thị' : 'Ẩn'}
                     </span>
                   </td>
                   <td className="px-6 py-4">
                     <div className="flex items-center justify-end gap-2">
-                      <button onClick={() => toggleActive(cat)} className="p-2 text-slate-400 hover:text-amber-400 hover:bg-amber-500/10 rounded-lg transition-all" title={cat.is_active ? 'Ẩn' : 'Hiện'}>
+                      <button onClick={() => toggleActive(cat)} className="p-2 text-slate-500 hover:text-amber-600 hover:bg-amber-100 rounded-lg transition-all" title={cat.is_active ? 'Ẩn' : 'Hiện'}>
                         {cat.is_active ? <Eye size={16} /> : <EyeOff size={16} />}
                       </button>
-                      <button onClick={() => openEdit(cat)} className="p-2 text-slate-400 hover:text-blue-400 hover:bg-blue-500/10 rounded-lg transition-all">
+                      <button onClick={() => openEdit(cat)} className="p-2 text-slate-500 hover:text-blue-400 hover:bg-blue-500/10 rounded-lg transition-all">
                         <Edit2 size={16} />
                       </button>
                     </div>
@@ -117,39 +117,39 @@ export default function AdminCategories() {
 
       {showForm && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-slate-900 border border-slate-700 rounded-2xl p-6 w-full max-w-md">
-            <h3 className="text-white font-semibold text-lg mb-5">{editing ? 'Sửa danh mục' : 'Thêm danh mục'}</h3>
+          <div className="bg-white shadow-sm border border-slate-300 rounded-2xl p-6 w-full max-w-md">
+            <h3 className="text-slate-800 font-semibold text-lg mb-5">{editing ? 'Sửa danh mục' : 'Thêm danh mục'}</h3>
             <div className="space-y-4">
               <div>
-                <label className="text-slate-400 text-sm block mb-1.5">Tên danh mục *</label>
+                <label className="text-slate-500 text-sm block mb-1.5">Tên danh mục *</label>
                 <input
                   type="text"
                   value={form.name}
                   onChange={e => setForm(f => ({ ...f, name: e.target.value }))}
-                  className="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-amber-500"
+                  className="w-full bg-white border border-slate-300 rounded-xl px-4 py-3 text-slate-800 text-sm focus:outline-none focus:border-amber-500"
                 />
               </div>
               <div>
-                <label className="text-slate-400 text-sm block mb-1.5">URL hình ảnh</label>
+                <label className="text-slate-500 text-sm block mb-1.5">URL hình ảnh</label>
                 <input
                   type="text"
                   value={form.image_url}
                   onChange={e => setForm(f => ({ ...f, image_url: e.target.value }))}
-                  className="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-amber-500"
+                  className="w-full bg-white border border-slate-300 rounded-xl px-4 py-3 text-slate-800 text-sm focus:outline-none focus:border-amber-500"
                 />
               </div>
               <div>
-                <label className="text-slate-400 text-sm block mb-1.5">Thứ tự hiển thị</label>
+                <label className="text-slate-500 text-sm block mb-1.5">Thứ tự hiển thị</label>
                 <input
                   type="number"
                   value={form.sort_order}
                   onChange={e => setForm(f => ({ ...f, sort_order: parseInt(e.target.value) || 0 }))}
-                  className="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-amber-500"
+                  className="w-full bg-white border border-slate-300 rounded-xl px-4 py-3 text-slate-800 text-sm focus:outline-none focus:border-amber-500"
                 />
               </div>
             </div>
             <div className="flex gap-3 mt-6">
-              <button onClick={() => setShowForm(false)} className="flex-1 bg-slate-800 hover:bg-slate-700 text-slate-300 py-3 rounded-xl transition-colors">Hủy</button>
+              <button onClick={() => setShowForm(false)} className="flex-1 bg-white hover:bg-slate-100 text-slate-600 py-3 rounded-xl transition-colors">Hủy</button>
               <button onClick={handleSave} className="flex-1 bg-amber-500 hover:bg-amber-400 text-slate-950 font-semibold py-3 rounded-xl transition-colors">Lưu</button>
             </div>
           </div>

@@ -10,7 +10,7 @@
 /* Stage / background behind the iPad */
 .ipad-stage {
   background:
-    radial-gradient(ellipse at 50% 40%, #1e1e2f 0%, #111118 50%, #08080c 100%);
+    radial-gradient(ellipse at 50% 40%, #ffffff 0%, #f9fafb 50%, #f3f4f6 100%);
   /* Subtle desk surface feel */
   position: relative;
 }
@@ -215,3 +215,6 @@
     height: min(85vh, 420px);
   }
 }
+
+.hide-scrollbar::-webkit-scrollbar { display: none; }
+.hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }

@@ -36,14 +36,14 @@ export default function AdminSidebar({ user, page, onNavigate, onLogout }: Props
   const accessible = navItems.filter(item => item.roles.includes(user.role));
 
   return (
-    <aside className="w-60 bg-slate-900 border-r border-slate-800 flex flex-col flex-shrink-0">
-      <div className="p-5 border-b border-slate-800">
+    <aside className="w-60 bg-white shadow-sm border-r border-slate-200 flex flex-col flex-shrink-0">
+      <div className="p-5 border-b border-slate-200">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-slate-800 flex items-center justify-center flex-shrink-0 overflow-hidden p-1">
+          <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center flex-shrink-0 overflow-hidden p-1">
             <img src="/logoxuanhieu.png" alt="Logo" className="w-full h-full object-contain" />
           </div>
           <div className="min-w-0">
-            <p className="text-white font-semibold text-sm truncate">Xuân Hiếu</p>
+            <p className="text-slate-800 font-semibold text-sm truncate">Xuân Hiếu</p>
             <p className="text-slate-500 text-xs">Quản trị hệ thống</p>
           </div>
         </div>
@@ -56,8 +56,8 @@ export default function AdminSidebar({ user, page, onNavigate, onLogout }: Props
             onClick={() => onNavigate(item.page)}
             className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition-all ${
               page === item.page
-                ? 'bg-amber-500/10 text-amber-400 font-medium'
-                : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800'
+                ? 'bg-amber-100 text-amber-600 font-medium'
+                : 'text-slate-500 hover:text-slate-700 hover:bg-slate-50'
             }`}
           >
             {item.icon}
@@ -66,19 +66,19 @@ export default function AdminSidebar({ user, page, onNavigate, onLogout }: Props
         ))}
       </nav>
 
-      <div className="p-3 border-t border-slate-800">
+      <div className="p-3 border-t border-slate-200">
         <div className="flex items-center gap-3 px-3 py-2 mb-1">
-          <div className="w-8 h-8 rounded-full bg-amber-500/20 flex items-center justify-center text-amber-400 font-bold text-sm flex-shrink-0">
+          <div className="w-8 h-8 rounded-full bg-amber-500/20 flex items-center justify-center text-amber-600 font-bold text-sm flex-shrink-0">
             {user.name.charAt(0)}
           </div>
           <div className="min-w-0 flex-1">
-            <p className="text-white text-sm font-medium truncate">{user.name}</p>
+            <p className="text-slate-800 text-sm font-medium truncate">{user.name}</p>
             <p className="text-slate-500 text-xs truncate">{roleLabels[user.role]}</p>
           </div>
         </div>
         <button
           onClick={onLogout}
-          className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-slate-400 hover:text-red-400 hover:bg-red-500/10 transition-all"
+          className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-slate-500 hover:text-red-400 hover:bg-red-500/10 transition-all"
         >
           <LogOut size={18} />
           Đăng xuất

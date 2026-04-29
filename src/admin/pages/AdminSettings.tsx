@@ -45,8 +45,8 @@ export default function AdminSettings() {
     <div className="p-8">
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-2xl font-bold text-white">Cài đặt hệ thống</h1>
-          <p className="text-slate-400 text-sm mt-1">Cấu hình app iPad và thông tin cửa hàng</p>
+          <h1 className="text-2xl font-bold text-slate-800">Cài đặt hệ thống</h1>
+          <p className="text-slate-500 text-sm mt-1">Cấu hình app iPad và thông tin cửa hàng</p>
         </div>
         <button
           onClick={handleSave}
@@ -63,10 +63,10 @@ export default function AdminSettings() {
           <div className="w-8 h-8 border-2 border-amber-500 border-t-transparent rounded-full animate-spin" />
         </div>
       ) : (
-        <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-5 max-w-2xl">
+        <div className="bg-white shadow-sm border border-slate-200 rounded-2xl p-6 space-y-5 max-w-2xl">
           {settings.map(s => (
             <div key={s.key}>
-              <label className="text-slate-300 text-sm font-medium block mb-1.5">
+              <label className="text-slate-600 text-sm font-medium block mb-1.5">
                 {labelMap[s.key] || s.key}
               </label>
               {s.description && <p className="text-slate-500 text-xs mb-2">{s.description}</p>}
@@ -74,7 +74,7 @@ export default function AdminSettings() {
                 type="text"
                 value={values[s.key] ?? ''}
                 onChange={e => setValues(v => ({ ...v, [s.key]: e.target.value }))}
-                className="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-amber-500 transition-colors"
+                className="w-full bg-white border border-slate-300 rounded-xl px-4 py-3 text-slate-800 text-sm focus:outline-none focus:border-amber-500 transition-colors"
               />
             </div>
           ))}

@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { supabase, Category, Product } from '../lib/supabase';
-import IPadSidebar from './IPadSidebar';
+import IPadCategoryTabs from './IPadCategoryTabs';
 import IPadProductGrid from './IPadProductGrid';
 import IPadProductDetail from './IPadProductDetail';
 import IPadSearch from './IPadSearch';
@@ -50,7 +50,13 @@ export default function IPadApp() {
       .select('*')
       .eq('is_active', true)
       .order('sort_order');
-    if (data) setCategories(data);
+    if (data) {
+      setCategories(data);
+      if (data.length > 0) {
+        setSelectedCategory(data[0]);
+        setView('products');
+      }
+    }
   }
 
   async function loadSettings() {
@@ -92,9 +98,9 @@ export default function IPadApp() {
   };
 
   return (
-    <div className="flex flex-col h-screen bg-[#0d1b3e] text-white font-sans select-none overflow-hidden">
+    <div className="flex flex-col h-screen bg-[#f8f9fa] text-gray-800 font-sans select-none overflow-hidden">
       {/* Status bar */}
-      <div className="flex items-center justify-between px-6 pt-2 pb-1 text-xs text-white/70">
+      <div className="flex items-center justify-between px-6 pt-2 pb-1 text-xs text-gray-600">
         <span className="font-semibold text-white bg-red-500 px-2 py-0.5 rounded-full text-[11px]">
           {new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' })}
         </span>
@@ -106,56 +112,62 @@ export default function IPadApp() {
       </div>
 
       {/* Header */}
-      <div className="flex items-center justify-between px-6 py-3 border-b border-white/10">
-        <div className="flex items-center gap-3 w-32">
-          {view !== 'categories' && (
-            <button
-              onClick={handleBack}
-              className="flex items-center gap-1 text-[#c9a84c] active:opacity-70 transition-opacity"
-            >
-              <span className="text-xl">←</span>
-              {view === 'detail' && selectedCategory && (
-                <span className="text-sm truncate max-w-[80px]">{selectedCategory.name}</span>
-              )}
-            </button>
-          )}
+      <div className="flex items-center justify-between px-8 py-4 bg-[#fcf9f5] border-b border-gray-200">
+        <div className="flex items-center gap-4">
+          <img src="/logoxuanhieu.png" alt="Logo" className="h-10 object-contain" />
+          <div className="h-8 w-px bg-gray-300" />
+          <p className="text-gray-600 text-lg">
+            Xin chào, <span className="font-bold text-[#b08d3a]">Quý khách</span>
+          </p>
         </div>
 
-        <h1 className="text-xl font-bold text-[#c9a84c] tracking-wide flex-1 text-center">
-          {getTitle()}
-        </h1>
-
-        <div className="flex items-center gap-4 w-32 justify-end">
+        <div className="flex items-center gap-6 justify-end">
           <button
             onClick={() => setView('search')}
-            className="text-white/80 hover:text-[#c9a84c] active:opacity-70 transition-colors"
+            className="text-gray-500 hover:text-[#b08d3a] active:opacity-70 transition-colors"
           >
-            <Search size={22} />
+            <Search size={24} />
           </button>
           <button
             onClick={() => setView('quotations')}
-            className="text-white/80 hover:text-[#c9a84c] active:opacity-70 transition-colors"
+            className="text-gray-500 hover:text-[#b08d3a] active:opacity-70 transition-colors"
           >
-            <FileText size={22} />
+            <FileText size={24} />
           </button>
           <button
             onClick={() => setView('interested')}
-            className="text-white/80 hover:text-[#c9a84c] active:opacity-70 transition-colors"
+            className="text-gray-500 hover:text-[#b08d3a] active:opacity-70 transition-colors"
           >
-            <Bookmark size={22} />
+            <Bookmark size={24} />
           </button>
         </div>
       </div>
 
       {/* Main content */}
-      <div className="flex flex-1 overflow-hidden">
-        {/* Sidebar - only show for category/product views */}
-        {(view === 'categories' || view === 'products' || view === 'detail') && showSidebar && (
-          <IPadSidebar
-            categories={categories}
-            selectedCategory={selectedCategory}
-            onSelect={handleCategorySelect}
-          />
+      <div className="flex flex-1 flex-col overflow-hidden bg-gray-50 px-6 pt-4">
+        {/* Categories Header */}
+        {(view === 'categories' || view === 'products') && (
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex-1 overflow-hidden">
+               <IPadCategoryTabs
+                  categories={categories}
+                  selectedCategory={selectedCategory}
+                  onSelect={handleCategorySelect}
+               />
+            </div>
+          </div>
+        )}
+
+        {/* Back button for detail view */}
+        {view === 'detail' && (
+          <div className="mb-4">
+            <button
+              onClick={handleBack}
+              className="inline-flex items-center gap-2 text-[#b08d3a] hover:underline bg-white px-5 py-2.5 rounded-xl border border-gray-200 shadow-sm font-medium"
+            >
+              <span className="text-xl leading-none">←</span> Quay lại
+            </button>
+          </div>
         )}
 
         {/* Content area */}
@@ -164,8 +176,8 @@ export default function IPadApp() {
             <div className="flex items-center justify-center h-full">
               <div className="text-center flex flex-col items-center">
                 <img src="/logoxuanhieu.png" alt="Xuân Hiếu Logo" className="h-24 object-contain mb-6" />
-                <p className="text-[#c9a84c] text-4xl font-bold mb-4">{storeName}</p>
-                <p className="text-white/50 text-lg">Chọn danh mục từ menu bên trái</p>
+                <p className="text-[#b08d3a] text-4xl font-bold mb-4">{storeName}</p>
+                <p className="text-gray-500 text-lg">Chọn danh mục từ menu bên trái</p>
               </div>
             </div>
           )}
@@ -195,7 +207,7 @@ export default function IPadApp() {
 
       {/* Bottom indicator */}
       <div className="flex justify-center py-2">
-        <div className="w-32 h-1 bg-white/30 rounded-full" />
+        <div className="w-32 h-1 bg-gray-300 rounded-full" />
       </div>
     </div>
   );

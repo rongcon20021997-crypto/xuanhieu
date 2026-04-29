@@ -9,12 +9,12 @@ type Props = {
   onSaved: () => void;
 };
 
-const inputCls = "w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2.5 text-white text-sm focus:outline-none focus:border-amber-500 transition-colors";
+const inputCls = "w-full bg-white border border-slate-300 rounded-xl px-3 py-2.5 text-slate-800 text-sm focus:outline-none focus:border-amber-500 transition-colors";
 
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div>
-      <label className="text-slate-400 text-xs block mb-1.5 font-medium">{label}</label>
+      <label className="text-slate-500 text-xs block mb-1.5 font-medium">{label}</label>
       {children}
     </div>
   );
@@ -276,10 +276,10 @@ export default function AdminProductForm({ product, categories, onClose, onSaved
 
   return (
     <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-start justify-center p-4 overflow-y-auto">
-      <div className="bg-slate-900 border border-slate-700 rounded-2xl w-full max-w-3xl my-4">
-        <div className="flex items-center justify-between p-6 border-b border-slate-800">
-          <h3 className="text-white font-semibold text-lg">{product ? 'Sửa sản phẩm' : 'Thêm sản phẩm mới'}</h3>
-          <button onClick={onClose} className="text-slate-500 hover:text-white transition-colors">
+      <div className="bg-white shadow-sm border border-slate-300 rounded-2xl w-full max-w-3xl my-4">
+        <div className="flex items-center justify-between p-6 border-b border-slate-200">
+          <h3 className="text-slate-800 font-semibold text-lg">{product ? 'Sửa sản phẩm' : 'Thêm sản phẩm mới'}</h3>
+          <button onClick={onClose} className="text-slate-500 hover:text-slate-800 transition-colors">
             <X size={20} />
           </button>
         </div>
@@ -287,21 +287,21 @@ export default function AdminProductForm({ product, categories, onClose, onSaved
         <div className="p-6 space-y-6 max-h-[70vh] overflow-y-auto">
           {/* ═══ MEDIA SECTION ═══ */}
           <div className="space-y-4">
-            <div className="flex items-center gap-2 text-slate-300 text-sm font-semibold">
-              <Image size={16} className="text-amber-400" />
+            <div className="flex items-center gap-2 text-slate-600 text-sm font-semibold">
+              <Image size={16} className="text-amber-600" />
               Hình ảnh & Video sản phẩm
             </div>
 
             {/* Image Upload Area */}
             <div>
               <div className="flex items-center justify-between mb-2">
-                <span className="text-slate-400 text-xs font-medium">
+                <span className="text-slate-500 text-xs font-medium">
                   Hình ảnh ({totalImages} ảnh)
                 </span>
                 <button
                   type="button"
                   onClick={() => imageInputRef.current?.click()}
-                  className="flex items-center gap-1.5 text-xs text-amber-400 hover:text-amber-300 font-medium transition-colors"
+                  className="flex items-center gap-1.5 text-xs text-amber-600 hover:text-amber-300 font-medium transition-colors"
                 >
                   <Plus size={14} />
                   Thêm ảnh
@@ -320,7 +320,7 @@ export default function AdminProductForm({ product, categories, onClose, onSaved
               <div className="grid grid-cols-5 gap-2">
                 {/* Existing images */}
                 {activeExistingImages.map((img) => (
-                  <div key={img.id} className="relative group aspect-square rounded-xl overflow-hidden border border-slate-700 bg-slate-800">
+                  <div key={img.id} className="relative group aspect-square rounded-xl overflow-hidden border border-slate-300 bg-white">
                     <img src={img.image_url} alt="" className="w-full h-full object-cover" />
                     {img.is_thumbnail && (
                       <span className="absolute top-1 left-1 bg-amber-500 text-slate-950 text-[9px] font-bold px-1.5 py-0.5 rounded">
@@ -329,26 +329,26 @@ export default function AdminProductForm({ product, categories, onClose, onSaved
                     )}
                     <button
                       onClick={() => removeExistingImage(img.id)}
-                      className="absolute top-1 right-1 bg-red-500/80 hover:bg-red-500 text-white p-1 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"
+                      className="absolute top-1 right-1 bg-red-500/80 hover:bg-red-500 text-slate-800 p-1 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"
                     >
                       <Trash2 size={12} />
                     </button>
                     <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/60 to-transparent p-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                      <GripVertical size={12} className="mx-auto text-white/70" />
+                      <GripVertical size={12} className="mx-auto text-slate-800/70" />
                     </div>
                   </div>
                 ))}
 
                 {/* New image previews */}
                 {newImagePreviews.map((preview, i) => (
-                  <div key={`new-${i}`} className="relative group aspect-square rounded-xl overflow-hidden border border-amber-500/30 bg-slate-800">
+                  <div key={`new-${i}`} className="relative group aspect-square rounded-xl overflow-hidden border border-amber-500/30 bg-white">
                     <img src={preview} alt="" className="w-full h-full object-cover" />
-                    <span className="absolute top-1 left-1 bg-emerald-500/80 text-white text-[9px] font-bold px-1.5 py-0.5 rounded">
+                    <span className="absolute top-1 left-1 bg-emerald-500/80 text-slate-800 text-[9px] font-bold px-1.5 py-0.5 rounded">
                       MỚI
                     </span>
                     <button
                       onClick={() => removeNewImage(i)}
-                      className="absolute top-1 right-1 bg-red-500/80 hover:bg-red-500 text-white p-1 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"
+                      className="absolute top-1 right-1 bg-red-500/80 hover:bg-red-500 text-slate-800 p-1 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"
                     >
                       <Trash2 size={12} />
                     </button>
@@ -360,8 +360,8 @@ export default function AdminProductForm({ product, categories, onClose, onSaved
                   onClick={() => imageInputRef.current?.click()}
                   className="aspect-square rounded-xl border-2 border-dashed border-slate-600 hover:border-amber-500/50 flex flex-col items-center justify-center gap-1.5 transition-colors group"
                 >
-                  <Upload size={18} className="text-slate-500 group-hover:text-amber-400 transition-colors" />
-                  <span className="text-[10px] text-slate-500 group-hover:text-amber-400 font-medium">Thêm ảnh</span>
+                  <Upload size={18} className="text-slate-500 group-hover:text-amber-600 transition-colors" />
+                  <span className="text-[10px] text-slate-500 group-hover:text-amber-600 font-medium">Thêm ảnh</span>
                 </button>
               </div>
             </div>
@@ -371,14 +371,14 @@ export default function AdminProductForm({ product, categories, onClose, onSaved
               <div className="flex items-center justify-between mb-2">
                 <div className="flex items-center gap-1.5">
                   <Film size={14} className="text-purple-400" />
-                  <span className="text-slate-400 text-xs font-medium">
+                  <span className="text-slate-500 text-xs font-medium">
                     Video sản phẩm (tối đa 1 video, ≤ 100MB)
                   </span>
                 </div>
               </div>
 
               {hasVideo ? (
-                <div className="relative rounded-xl overflow-hidden border border-slate-700 bg-slate-800">
+                <div className="relative rounded-xl overflow-hidden border border-slate-300 bg-white">
                   <div className="flex items-center gap-3 p-3">
                     {/* Video preview */}
                     <div className="w-32 h-20 rounded-lg overflow-hidden bg-black flex-shrink-0">
@@ -389,10 +389,10 @@ export default function AdminProductForm({ product, categories, onClose, onSaved
                       ) : null}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-white text-sm font-medium truncate">
+                      <p className="text-slate-800 text-sm font-medium truncate">
                         {videoFile ? videoFile.name : 'Video hiện tại'}
                       </p>
-                      <p className="text-slate-400 text-xs mt-0.5">
+                      <p className="text-slate-500 text-xs mt-0.5">
                         {videoFile ? `${(videoFile.size / (1024 * 1024)).toFixed(1)} MB` : 'Đã tải lên'}
                       </p>
                     </div>
@@ -426,7 +426,7 @@ export default function AdminProductForm({ product, categories, onClose, onSaved
           </div>
 
           {/* ═══ PRODUCT INFO SECTION ═══ */}
-          <div className="border-t border-slate-800 pt-5">
+          <div className="border-t border-slate-200 pt-5">
             <div className="grid grid-cols-2 gap-4">
               <Field label="Mã sản phẩm *">
                 <input type="text" value={form.code} onChange={e => setForm(f => ({ ...f, code: e.target.value }))} className={inputCls} />
@@ -490,7 +490,7 @@ export default function AdminProductForm({ product, categories, onClose, onSaved
         )}
         {uploadProgress && (
           <div className="px-6 pb-2">
-            <div className="flex items-center gap-2 text-amber-400 text-sm bg-amber-500/10 border border-amber-500/20 rounded-lg px-3 py-2">
+            <div className="flex items-center gap-2 text-amber-600 text-sm bg-amber-100 border border-amber-500/20 rounded-lg px-3 py-2">
               <Loader2 size={14} className="animate-spin" />
               {uploadProgress}
             </div>
@@ -498,8 +498,8 @@ export default function AdminProductForm({ product, categories, onClose, onSaved
         )}
 
         {/* Actions */}
-        <div className="flex gap-3 p-6 border-t border-slate-800">
-          <button onClick={onClose} className="flex-1 bg-slate-800 hover:bg-slate-700 text-slate-300 py-3 rounded-xl transition-colors">Hủy</button>
+        <div className="flex gap-3 p-6 border-t border-slate-200">
+          <button onClick={onClose} className="flex-1 bg-white hover:bg-slate-100 text-slate-600 py-3 rounded-xl transition-colors">Hủy</button>
           <button onClick={handleSave} disabled={saving} className="flex-1 bg-amber-500 hover:bg-amber-400 disabled:opacity-50 text-slate-950 font-semibold py-3 rounded-xl transition-colors flex items-center justify-center gap-2">
             {saving && <Loader2 size={16} className="animate-spin" />}
             {saving ? 'Đang lưu...' : 'Lưu sản phẩm'}

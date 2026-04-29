@@ -91,8 +91,8 @@ export default function AdminReports() {
   return (
     <div className="p-8">
       <div className="mb-6">
-        <h1 className="text-2xl font-bold text-white">Báo cáo</h1>
-        <p className="text-slate-400 text-sm mt-1">Thống kê tổng quan hệ thống</p>
+        <h1 className="text-2xl font-bold text-slate-800">Báo cáo</h1>
+        <p className="text-slate-500 text-sm mt-1">Thống kê tổng quan hệ thống</p>
       </div>
 
       {/* Tabs */}
@@ -101,7 +101,7 @@ export default function AdminReports() {
           <button
             key={t.key}
             onClick={() => setTab(t.key)}
-            className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium transition-all ${tab === t.key ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20' : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800'}`}
+            className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium transition-all ${tab === t.key ? 'bg-amber-100 text-amber-600 border border-amber-500/20' : 'text-slate-500 hover:text-slate-700 hover:bg-slate-50'}`}
           >
             {t.icon}
             {t.label}
@@ -112,8 +112,8 @@ export default function AdminReports() {
       {/* Revenue */}
       {tab === 'revenue' && (
         <div className="space-y-4">
-          <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6">
-            <h2 className="text-white font-semibold mb-4">Doanh thu theo danh mục</h2>
+          <div className="bg-white shadow-sm border border-slate-200 rounded-2xl p-6">
+            <h2 className="text-slate-800 font-semibold mb-4">Doanh thu theo danh mục</h2>
             {revenueByCategory.length === 0 ? (
               <p className="text-slate-500 text-sm">Chưa có dữ liệu bán hàng</p>
             ) : (
@@ -123,13 +123,13 @@ export default function AdminReports() {
                   return (
                     <div key={r.name}>
                       <div className="flex items-center justify-between mb-1">
-                        <span className="text-slate-300 text-sm">{r.name}</span>
+                        <span className="text-slate-600 text-sm">{r.name}</span>
                         <div className="text-right">
-                          <span className="text-amber-400 font-semibold text-sm">{formatCurrency(r.revenue)}</span>
+                          <span className="text-amber-600 font-semibold text-sm">{formatCurrency(r.revenue)}</span>
                           <span className="text-slate-500 text-xs ml-2">({r.count} bán)</span>
                         </div>
                       </div>
-                      <div className="w-full bg-slate-800 rounded-full h-2">
+                      <div className="w-full bg-white rounded-full h-2">
                         <div className="bg-amber-500 h-2 rounded-full transition-all" style={{ width: `${(r.revenue / maxRev) * 100}%` }} />
                       </div>
                     </div>
@@ -145,19 +145,19 @@ export default function AdminReports() {
       {tab === 'stock' && (
         <div className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
-            <div className="bg-emerald-500/10 border border-emerald-500/20 rounded-2xl p-6">
-              <p className="text-emerald-400/70 text-sm mb-1">Còn hàng</p>
-              <p className="text-emerald-400 text-4xl font-bold">{stockData.in_stock}</p>
+            <div className="bg-emerald-100 border border-emerald-500/20 rounded-2xl p-6">
+              <p className="text-emerald-600/70 text-sm mb-1">Còn hàng</p>
+              <p className="text-emerald-600 text-4xl font-bold">{stockData.in_stock}</p>
             </div>
             <div className="bg-red-500/10 border border-red-500/20 rounded-2xl p-6">
               <p className="text-red-400/70 text-sm mb-1">Hết hàng</p>
               <p className="text-red-400 text-4xl font-bold">{stockData.out_of_stock}</p>
             </div>
           </div>
-          <div className="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden">
+          <div className="bg-white shadow-sm border border-slate-200 rounded-2xl overflow-hidden">
             <table className="w-full">
               <thead>
-                <tr className="border-b border-slate-800">
+                <tr className="border-b border-slate-200">
                   <th className="text-left text-slate-500 text-xs uppercase tracking-wide px-6 py-4 font-medium">Danh mục</th>
                   <th className="text-center text-slate-500 text-xs uppercase tracking-wide px-6 py-4 font-medium">Còn hàng</th>
                   <th className="text-center text-slate-500 text-xs uppercase tracking-wide px-6 py-4 font-medium">Hết hàng</th>
@@ -165,9 +165,9 @@ export default function AdminReports() {
               </thead>
               <tbody>
                 {stockData.categories.map(c => (
-                  <tr key={c.name} className="border-b border-slate-800/50">
-                    <td className="px-6 py-3 text-white text-sm">{c.name}</td>
-                    <td className="px-6 py-3 text-center text-emerald-400 font-medium">{c.in_stock}</td>
+                  <tr key={c.name} className="border-b border-slate-200">
+                    <td className="px-6 py-3 text-slate-800 text-sm">{c.name}</td>
+                    <td className="px-6 py-3 text-center text-emerald-600 font-medium">{c.in_stock}</td>
                     <td className="px-6 py-3 text-center text-red-400 font-medium">{c.out_of_stock}</td>
                   </tr>
                 ))}
@@ -187,12 +187,12 @@ export default function AdminReports() {
             { label: 'Đã hủy', value: quotationStats.cancelled, color: 'red' },
           ].map(s => (
             <div key={s.label} className={`bg-${s.color}-500/10 border border-${s.color}-500/20 rounded-2xl p-6`}>
-              <p className="text-slate-400 text-sm mb-1">{s.label}</p>
-              <p className="text-white text-4xl font-bold">{s.value}</p>
+              <p className="text-slate-500 text-sm mb-1">{s.label}</p>
+              <p className="text-slate-800 text-4xl font-bold">{s.value}</p>
             </div>
           ))}
-          <div className="col-span-2 bg-slate-900 border border-slate-800 rounded-2xl p-6">
-            <p className="text-slate-400 text-sm mb-1">Tổng số tiền giảm giá đã báo</p>
+          <div className="col-span-2 bg-white shadow-sm border border-slate-200 rounded-2xl p-6">
+            <p className="text-slate-500 text-sm mb-1">Tổng số tiền giảm giá đã báo</p>
             <p className="text-red-400 text-3xl font-bold">{formatCurrency(quotationStats.totalDiscount)}</p>
           </div>
         </div>
@@ -200,10 +200,10 @@ export default function AdminReports() {
 
       {/* Discounts */}
       {tab === 'discounts' && (
-        <div className="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden">
+        <div className="bg-white shadow-sm border border-slate-200 rounded-2xl overflow-hidden">
           <table className="w-full">
             <thead>
-              <tr className="border-b border-slate-800">
+              <tr className="border-b border-slate-200">
                 <th className="text-left text-slate-500 text-xs uppercase tracking-wide px-6 py-4 font-medium">Nhân viên</th>
                 <th className="text-center text-slate-500 text-xs uppercase tracking-wide px-6 py-4 font-medium">Số báo giá</th>
                 <th className="text-center text-slate-500 text-xs uppercase tracking-wide px-6 py-4 font-medium">% Giảm TB</th>
@@ -214,10 +214,10 @@ export default function AdminReports() {
               {discountData.length === 0 ? (
                 <tr><td colSpan={4} className="px-6 py-12 text-center text-slate-500">Chưa có dữ liệu</td></tr>
               ) : discountData.map(d => (
-                <tr key={d.sale_user_name} className="border-b border-slate-800/50">
-                  <td className="px-6 py-4 text-white font-medium">{d.sale_user_name}</td>
-                  <td className="px-6 py-4 text-center text-slate-400">{d.count}</td>
-                  <td className="px-6 py-4 text-center text-amber-400">{d.avg_discount.toFixed(1)}%</td>
+                <tr key={d.sale_user_name} className="border-b border-slate-200">
+                  <td className="px-6 py-4 text-slate-800 font-medium">{d.sale_user_name}</td>
+                  <td className="px-6 py-4 text-center text-slate-500">{d.count}</td>
+                  <td className="px-6 py-4 text-center text-amber-600">{d.avg_discount.toFixed(1)}%</td>
                   <td className="px-6 py-4 text-right text-red-400 font-semibold">{formatCurrency(d.total_discount)}</td>
                 </tr>
               ))}

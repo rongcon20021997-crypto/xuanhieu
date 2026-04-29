@@ -9,15 +9,15 @@ export default function App() {
   const [tab, setTab] = useState<Tab>('ipad');
 
   return (
-    <div className="flex flex-col h-screen bg-gray-950">
+    <div className="flex flex-col h-screen bg-gray-50">
       {/* Tab bar */}
-      <div className="flex-shrink-0 flex items-center bg-gray-900 border-b border-gray-800 px-4 py-1.5 gap-2 z-50">
+      <div className="flex-shrink-0 flex items-center bg-white border-b border-gray-200 px-4 py-1.5 gap-2 z-50">
         <button
           onClick={() => setTab('ipad')}
           className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${
             tab === 'ipad'
-              ? 'bg-[#0d1b3e] text-[#c9a84c] shadow-lg'
-              : 'text-gray-400 hover:text-gray-200 hover:bg-gray-800'
+              ? 'bg-[#f8f9fa] text-[#b08d3a] shadow-sm border border-gray-200'
+              : 'text-gray-500 hover:text-gray-800 hover:bg-gray-100'
           }`}
         >
           <Tablet size={16} />
@@ -27,14 +27,14 @@ export default function App() {
           onClick={() => setTab('admin')}
           className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${
             tab === 'admin'
-              ? 'bg-slate-800 text-amber-400 shadow-lg'
-              : 'text-gray-400 hover:text-gray-200 hover:bg-gray-800'
+              ? 'bg-slate-50 text-amber-600 shadow-sm border border-slate-200'
+              : 'text-gray-500 hover:text-gray-800 hover:bg-gray-100'
           }`}
         >
           <Settings size={16} />
           Quản trị viên
         </button>
-        <div className="ml-auto text-gray-600 text-xs">Xuân Hiếu Jewelry System</div>
+        <div className="ml-auto text-gray-500 text-xs">Xuân Hiếu Jewelry System</div>
       </div>
 
       {/* Content */}

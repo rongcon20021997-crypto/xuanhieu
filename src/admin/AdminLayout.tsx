@@ -43,9 +43,9 @@ export default function AdminLayout({ user, onLogout }: Props) {
   };
 
   return (
-    <div className="flex h-screen bg-slate-950 text-white overflow-hidden">
+    <div className="flex h-screen bg-slate-50 text-slate-800 overflow-hidden">
       <AdminSidebar user={user} page={page} onNavigate={setPage} onLogout={onLogout} />
-      <main className="flex-1 overflow-auto bg-slate-950">
+      <main className="flex-1 overflow-auto bg-slate-50">
         {renderPage()}
       </main>
     </div>
