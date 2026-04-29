@@ -37,16 +37,17 @@ export default function IPadProductDetail({ product, onBack }: Props) {
       .eq('product_id', product.id)
       .order('sort_order');
 
+    // Đưa video lên đầu nếu có
+    if (product.video_url) {
+      items.push({ id: 'video', url: product.video_url, type: 'video' });
+    }
+
     if (data && data.length > 0) {
       data.forEach((img: ProductImage) => {
         items.push({ id: img.id, url: img.image_url, type: 'image', is_thumbnail: img.is_thumbnail });
       });
     } else if (product.thumbnail_url) {
       items.push({ id: 'thumb', url: product.thumbnail_url, type: 'image', is_thumbnail: true });
-    }
-
-    if (product.video_url) {
-      items.push({ id: 'video', url: product.video_url, type: 'video' });
     }
 
     setMediaItems(items);
