@@ -134,6 +134,12 @@ export default function AdminProductForm({ product, categories, onClose, onSaved
     setRemoveExistingVideo(true);
   }
 
+  // Set as thumbnail
+  function setAsThumbnail(url: string) {
+    setForm(prev => ({ ...prev, thumbnail_url: url }));
+  }
+
+
   // Upload a file to Supabase Storage
   async function uploadFile(file: File, bucket: string, path: string): Promise<string | null> {
     const { error: upErr } = await supabase.storage.from(bucket).upload(path, file, {
@@ -174,13 +180,24 @@ export default function AdminProductForm({ product, categories, onClose, onSaved
           const url = await uploadFile(file, 'product-media', path);
           if (url) {
             uploadedImageUrls.push(url);
-            // Use first uploaded image as thumbnail if no thumbnail set
-            if (!thumbnailUrl && i === 0) {
-              thumbnailUrl = url;
-            }
           }
         }
       }
+
+      // 1.1 Ensure thumbnail_url is valid
+      const activeExisting = existingImages.filter(img => !deletedImageIds.includes(img.id));
+      const allAvailableUrls = [
+        ...activeExisting.map(img => img.image_url),
+        ...uploadedImageUrls
+      ];
+
+      // If current thumbnail is deleted or not set, and we have images, pick the first one
+      if ((!thumbnailUrl || !allAvailableUrls.includes(thumbnailUrl)) && allAvailableUrls.length > 0) {
+        thumbnailUrl = allAvailableUrls[0];
+      } else if (allAvailableUrls.length === 0) {
+        thumbnailUrl = '';
+      }
+
 
       // 2. Upload video
       if (videoFile) {
@@ -252,11 +269,20 @@ export default function AdminProductForm({ product, categories, onClose, onSaved
         const imageRows = uploadedImageUrls.map((url, i) => ({
           product_id: productId,
           image_url: url,
-          is_thumbnail: i === 0 && !product,
+          is_thumbnail: url === thumbnailUrl,
           sort_order: maxOrder + i,
         }));
         await supabase.from('product_images').insert(imageRows);
       }
+
+      // 6. Update is_thumbnail for existing images
+      if (productId) {
+        // First reset all to false
+        await supabase.from('product_images').update({ is_thumbnail: false }).eq('product_id', productId);
+        // Set the correct one to true
+        await supabase.from('product_images').update({ is_thumbnail: true }).eq('product_id', productId).eq('image_url', thumbnailUrl);
+      }
+
 
       setUploadProgress('');
       onSaved();
@@ -315,29 +341,34 @@ export default function AdminProductForm({ product, categories, onClose, onSaved
                 onChange={handleImageSelect}
                 className="hidden"
               />
-
               {/* Image Grid */}
               <div className="grid grid-cols-5 gap-2">
                 {/* Existing images */}
                 {activeExistingImages.map((img) => (
-                  <div key={img.id} className="relative group aspect-square rounded-xl overflow-hidden border border-slate-300 bg-white">
+                  <div key={img.id} className={`relative group aspect-square rounded-xl overflow-hidden border ${form.thumbnail_url === img.image_url ? 'border-amber-500 ring-2 ring-amber-500/20' : 'border-slate-300'} bg-white cursor-pointer`} onClick={() => setAsThumbnail(img.image_url)}>
                     <img src={img.image_url} alt="" className="w-full h-full object-cover" />
-                    {img.is_thumbnail && (
+                    {form.thumbnail_url === img.image_url && (
                       <span className="absolute top-1 left-1 bg-amber-500 text-slate-950 text-[9px] font-bold px-1.5 py-0.5 rounded">
                         CHÍNH
                       </span>
                     )}
                     <button
-                      onClick={() => removeExistingImage(img.id)}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        removeExistingImage(img.id);
+                      }}
                       className="absolute top-1 right-1 bg-red-500/80 hover:bg-red-500 text-slate-800 p-1 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"
                     >
                       <Trash2 size={12} />
                     </button>
-                    <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/60 to-transparent p-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                      <GripVertical size={12} className="mx-auto text-slate-800/70" />
-                    </div>
+                    {form.thumbnail_url !== img.image_url && (
+                      <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                        <span className="text-white text-[10px] font-medium">Đặt làm ảnh chính</span>
+                      </div>
+                    )}
                   </div>
                 ))}
+
 
                 {/* New image previews */}
                 {newImagePreviews.map((preview, i) => (
