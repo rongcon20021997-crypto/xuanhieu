@@ -6,7 +6,7 @@ import IPadProductDetail from './IPadProductDetail';
 import IPadSearch from './IPadSearch';
 import IPadQuotations from './IPadQuotations';
 import IPadInterested from './IPadInterested';
-import { Search, Settings, Bookmark, FileText } from 'lucide-react';
+import { Search, Bookmark, FileText } from 'lucide-react';
 
 type View = 'categories' | 'products' | 'detail' | 'search' | 'quotations' | 'interested';
 
@@ -98,13 +98,16 @@ export default function IPadApp() {
   };
 
   return (
-    <div className="flex flex-col h-screen bg-[#f8f9fa] text-gray-800 font-sans select-none overflow-hidden">
+    <div className="flex flex-col h-screen select-none overflow-hidden"
+      style={{ background: 'linear-gradient(160deg, #0a0a0a 0%, #111111 50%, #0d0d0d 100%)', color: '#e8e0d0' }}>
+
       {/* Status bar */}
-      <div className="flex items-center justify-between px-6 pt-2 pb-1 text-xs text-gray-600">
-        <span className="font-semibold text-white bg-red-500 px-2 py-0.5 rounded-full text-[11px]">
+      <div className="flex items-center justify-between px-6 pt-2 pb-1 text-xs" style={{ color: '#8a7a60' }}>
+        <span className="font-semibold px-2 py-0.5 rounded-full text-[11px]"
+          style={{ background: 'linear-gradient(135deg, #c9a84c, #a07830)', color: '#0a0a0a' }}>
           {new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' })}
         </span>
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-1" style={{ color: '#6a5a40' }}>
           <span>▲▲▲</span>
           <span>WiFi</span>
           <span>■■■</span>
@@ -112,48 +115,58 @@ export default function IPadApp() {
       </div>
 
       {/* Header */}
-      <div className="flex items-center justify-between px-8 py-4 bg-[#fcf9f5] border-b border-gray-200">
+      <div className="flex items-center justify-between px-8 py-4"
+        style={{
+          background: 'rgba(15,13,10,0.95)',
+          borderBottom: '1px solid rgba(201,168,76,0.15)',
+          backdropFilter: 'blur(20px)',
+        }}>
         <div className="flex items-center gap-4">
-          <img src="/logoxuanhieu.png" alt="Logo" className="h-10 object-contain" />
-          <div className="h-8 w-px bg-gray-300" />
-          <p className="text-gray-600 text-lg">
-            Xin chào, <span className="font-bold text-[#b08d3a]">Quý khách</span>
+          <img src="/logoxuanhieu.png" alt="Logo" className="h-10 object-contain" style={{ filter: 'brightness(0.9) contrast(1.1)' }} />
+          <div className="h-8 w-px" style={{ background: 'rgba(201,168,76,0.3)' }} />
+          <p className="text-lg" style={{ color: '#a09080' }}>
+            Xin chào, <span className="font-bold" style={{ color: '#c9a84c' }}>Quý khách</span>
           </p>
         </div>
 
-        <div className="flex items-center gap-6 justify-end">
-          <button
-            onClick={() => setView('search')}
-            className="text-gray-500 hover:text-[#b08d3a] active:opacity-70 transition-colors"
-          >
-            <Search size={24} />
-          </button>
-          <button
-            onClick={() => setView('quotations')}
-            className="text-gray-500 hover:text-[#b08d3a] active:opacity-70 transition-colors"
-          >
-            <FileText size={24} />
-          </button>
-          <button
-            onClick={() => setView('interested')}
-            className="text-gray-500 hover:text-[#b08d3a] active:opacity-70 transition-colors"
-          >
-            <Bookmark size={24} />
-          </button>
+        <div className="flex items-center gap-2">
+          {[
+            { icon: <Search size={20} />, action: () => setView('search'), active: view === 'search' },
+            { icon: <FileText size={20} />, action: () => setView('quotations'), active: view === 'quotations' },
+            { icon: <Bookmark size={20} />, action: () => setView('interested'), active: view === 'interested' },
+          ].map((btn, i) => (
+            <button
+              key={i}
+              onClick={btn.action}
+              className="relative p-2.5 rounded-xl transition-all duration-200"
+              style={{
+                background: btn.active
+                  ? 'linear-gradient(135deg, rgba(201,168,76,0.2), rgba(160,120,48,0.15))'
+                  : 'rgba(255,255,255,0.04)',
+                border: btn.active
+                  ? '1px solid rgba(201,168,76,0.5)'
+                  : '1px solid rgba(255,255,255,0.06)',
+                color: btn.active ? '#c9a84c' : '#6a5a40',
+                boxShadow: btn.active ? '0 0 12px rgba(201,168,76,0.15)' : 'none',
+              }}
+            >
+              {btn.icon}
+            </button>
+          ))}
         </div>
       </div>
 
       {/* Main content */}
-      <div className="flex flex-1 flex-col overflow-hidden bg-gray-50 px-6 pt-4">
+      <div className="flex flex-1 flex-col overflow-hidden px-6 pt-4">
         {/* Categories Header */}
         {(view === 'categories' || view === 'products') && (
           <div className="flex items-center justify-between mb-4">
             <div className="flex-1 overflow-hidden">
-               <IPadCategoryTabs
-                  categories={categories}
-                  selectedCategory={selectedCategory}
-                  onSelect={handleCategorySelect}
-               />
+              <IPadCategoryTabs
+                categories={categories}
+                selectedCategory={selectedCategory}
+                onSelect={handleCategorySelect}
+              />
             </div>
           </div>
         )}
@@ -163,7 +176,12 @@ export default function IPadApp() {
           <div className="mb-4">
             <button
               onClick={handleBack}
-              className="inline-flex items-center gap-2 text-[#b08d3a] hover:underline bg-white px-5 py-2.5 rounded-xl border border-gray-200 shadow-sm font-medium"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-medium transition-all duration-200 active:scale-95"
+              style={{
+                background: 'rgba(201,168,76,0.08)',
+                border: '1px solid rgba(201,168,76,0.25)',
+                color: '#c9a84c',
+              }}
             >
               <span className="text-xl leading-none">←</span> Quay lại
             </button>
@@ -175,9 +193,16 @@ export default function IPadApp() {
           {view === 'categories' && (
             <div className="flex items-center justify-center h-full">
               <div className="text-center flex flex-col items-center">
-                <img src="/logoxuanhieu.png" alt="Xuân Hiếu Logo" className="h-24 object-contain mb-6" />
-                <p className="text-[#b08d3a] text-4xl font-bold mb-4">{storeName}</p>
-                <p className="text-gray-500 text-lg">Chọn danh mục từ menu bên trái</p>
+                <div className="relative mb-8">
+                  <div className="absolute inset-0 rounded-full blur-3xl opacity-20"
+                    style={{ background: 'radial-gradient(circle, #c9a84c, transparent)' }} />
+                  <img src="/logoxuanhieu.png" alt="Xuân Hiếu Logo" className="relative h-24 object-contain" />
+                </div>
+                <p className="text-4xl font-bold mb-3"
+                  style={{ background: 'linear-gradient(135deg, #c9a84c, #e8d090, #a07830)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+                  {storeName}
+                </p>
+                <p className="text-base" style={{ color: '#5a4a30' }}>Chọn danh mục từ menu bên trên</p>
               </div>
             </div>
           )}
@@ -207,7 +232,7 @@ export default function IPadApp() {
 
       {/* Bottom indicator */}
       <div className="flex justify-center py-2">
-        <div className="w-32 h-1 bg-gray-300 rounded-full" />
+        <div className="w-32 h-1 rounded-full" style={{ background: 'rgba(201,168,76,0.2)' }} />
       </div>
     </div>
   );
