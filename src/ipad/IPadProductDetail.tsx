@@ -19,7 +19,7 @@ export default function IPadProductDetail({ product, onBack }: Props) {
   const [mediaItems, setMediaItems] = useState<MediaItem[]>([]);
   const [currentIdx, setCurrentIdx] = useState(0);
   const [showPriceCalc, setShowPriceCalc] = useState(false);
-  const [discountInput, setDiscountInput] = useState('');
+  const [discountInput, setDiscountInput] = useState('0');
   const [calcResult, setCalcResult] = useState<null | { discountAmount: number; finalPrice: number; valid: boolean }>(null);
   const [saved, setSaved] = useState(false);
   const [quoteSaved, setQuoteSaved] = useState(false);
@@ -28,6 +28,19 @@ export default function IPadProductDetail({ product, onBack }: Props) {
   useEffect(() => {
     loadMedia();
   }, [product.id]);
+
+  // Tính lại giá mỗi khi discountInput thay đổi hoặc popup mở
+  useEffect(() => {
+    const disc = parseFloat(discountInput);
+    if (isNaN(disc) || disc < 0) {
+      setCalcResult(null);
+      return;
+    }
+    const valid = disc <= product.max_discount_percent;
+    const discountAmount = Math.round(product.listed_price * disc / 100);
+    const finalPrice = product.listed_price - discountAmount;
+    setCalcResult({ discountAmount, finalPrice, valid });
+  }, [discountInput, showPriceCalc, product]);
 
   async function loadMedia() {
     const items: MediaItem[] = [];
@@ -290,14 +303,14 @@ export default function IPadProductDetail({ product, onBack }: Props) {
       {showPriceCalc && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4"
           style={{ background: 'rgba(0,0,0,0.75)', backdropFilter: 'blur(8px)' }}>
-          <div className="w-full max-w-sm overflow-hidden rounded-2xl animate-in fade-in zoom-in-95 duration-200"
+          <div className="w-full max-w-md overflow-hidden rounded-2xl animate-in fade-in zoom-in-95 duration-200"
             style={{
               background: 'linear-gradient(160deg, #181410, #120e08)',
               border: '1px solid rgba(201,168,76,0.25)',
               boxShadow: '0 25px 60px rgba(0,0,0,0.7), 0 0 40px rgba(201,168,76,0.06)',
             }}>
             {/* Modal header */}
-            <div className="flex justify-between items-center p-4"
+            <div className="flex justify-between items-center px-5 py-4"
               style={{ borderBottom: '1px solid rgba(201,168,76,0.1)', background: 'rgba(255,255,255,0.02)' }}>
               <h3 className="font-bold flex items-center gap-2" style={{ color: '#c8b890' }}>
                 <Calculator size={18} style={{ color: '#c9a84c' }} /> Tính giá cho khách
@@ -311,82 +324,107 @@ export default function IPadProductDetail({ product, onBack }: Props) {
               </button>
             </div>
 
-            <div className="p-5 space-y-4">
-              <div>
+            {/* Table body */}
+            <div className="p-5">
+              {/* Input giảm giá — to, rõ, trên cùng */}
+              <div className="mb-4">
                 <label className="text-sm block mb-1.5" style={{ color: '#7a6a50' }}>
-                  % Giảm giá (tối đa <span className="font-bold" style={{ color: '#c9a84c' }}>{product.max_discount_percent}%</span>)
+                  Giảm giá <span style={{ color: '#5a4a30' }}></span>
                 </label>
-                <div className="flex gap-2">
-                  <input
-                    type="number"
-                    value={discountInput}
-                    onChange={e => { setDiscountInput(e.target.value); setCalcResult(null); }}
-                    placeholder="Nhập phần trăm..."
-                    min="0"
-                    max={product.max_discount_percent}
-                    className="flex-1 rounded-xl px-4 py-2.5 text-base focus:outline-none transition-all"
-                    style={{
-                      background: 'rgba(255,255,255,0.04)',
-                      border: '1px solid rgba(201,168,76,0.2)',
-                      color: '#c8b890',
-                    }}
-                    autoFocus
-                  />
-                  <button
-                    onClick={calcPrice}
-                    className="px-5 py-2.5 rounded-xl font-medium transition-all active:scale-95"
-                    style={{
-                      background: 'linear-gradient(135deg, #c9a84c, #a07830)',
-                      color: '#0a0a0a',
-                    }}
-                  >
-                    Tính
-                  </button>
-                </div>
+                <input
+                  type="number"
+                  value={discountInput}
+                  onChange={e => setDiscountInput(e.target.value)}
+                  placeholder="Nhập % giảm giá..."
+                  min="0"
+                  max={product.max_discount_percent}
+                  className="w-full rounded-xl px-4 py-3 text-lg focus:outline-none transition-all"
+                  style={{
+                    background: 'rgba(255,255,255,0.05)',
+                    border: '1px solid rgba(201,168,76,0.25)',
+                    color: '#e8d8b0',
+                  }}
+                  autoFocus
+                />
               </div>
 
-              {calcResult && (
-                <div className="rounded-xl p-4 transition-all"
+              <table className="w-full text-sm border-collapse">
+                <tbody>
+                  {/* Giá niêm yết */}
+                  <tr style={{ borderBottom: '1px solid rgba(201,168,76,0.08)' }}>
+                    <td className="py-3 pr-4 font-medium" style={{ color: '#8a7a60', width: '55%' }}>Giá niêm yết</td>
+                    <td className="py-3 text-right font-semibold" style={{ color: '#c8b890' }}>
+                      {formatCurrency(product.listed_price)}
+                    </td>
+                  </tr>
+
+                  {/* Giảm tối đa */}
+                  <tr style={{ borderBottom: '1px solid rgba(201,168,76,0.08)' }}>
+                    <td className="py-3 pr-4 font-medium" style={{ color: '#8a7a60' }}>Giảm tối đa cho phép</td>
+                    <td className="py-3 text-right font-semibold" style={{ color: '#c9a84c' }}>
+                      {product.max_discount_percent}%
+                    </td>
+                  </tr>
+
+                  {/* Số tiền giảm */}
+                  <tr style={{ borderBottom: '1px solid rgba(201,168,76,0.08)' }}>
+                    <td className="py-3 pr-4 font-medium" style={{ color: '#8a7a60' }}>Số tiền giảm</td>
+                    <td className="py-3 text-right font-semibold" style={{ color: '#e06060' }}>
+                      {calcResult ? `- ${formatCurrency(calcResult.discountAmount)}` : '—'}
+                    </td>
+                  </tr>
+
+                  {/* Giá khách thanh toán */}
+                  <tr style={{ borderBottom: '1px solid rgba(201,168,76,0.08)' }}>
+                    <td className="py-3 pr-4 font-bold" style={{ color: '#c8b890' }}>Giá khách thanh toán</td>
+                    <td className="py-3 text-right font-bold text-lg" style={{ color: '#c9a84c' }}>
+                      {calcResult ? formatCurrency(calcResult.finalPrice) : formatCurrency(product.listed_price)}
+                    </td>
+                  </tr>
+
+                  {/* Trạng thái */}
+                  <tr>
+                    <td className="pt-3 pr-4 font-bold" style={{ color: '#c8b890' }}>Trạng thái</td>
+                    <td className="pt-3 text-right">
+                      {calcResult ? (
+                        calcResult.valid ? (
+                          <span className="inline-block px-3 py-1 rounded-lg text-sm font-bold"
+                            style={{ background: 'rgba(50,160,80,0.15)', border: '1px solid rgba(80,200,100,0.25)', color: '#60c070' }}>
+                            Hợp lệ
+                          </span>
+                        ) : (
+                          <span className="inline-block px-3 py-1 rounded-lg text-sm font-bold"
+                            style={{ background: 'rgba(180,40,40,0.15)', border: '1px solid rgba(220,80,80,0.25)', color: '#e06060' }}>
+                            Không hợp lệ
+                          </span>
+                        )
+                      ) : (
+                        <span className="text-sm" style={{ color: '#4a3a20' }}>—</span>
+                      )}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+
+              {/* Action button */}
+              {calcResult && calcResult.valid && (
+                <button
+                  onClick={saveQuotation}
+                  className="w-full mt-5 py-3 rounded-xl font-bold transition-all active:scale-95 flex items-center justify-center gap-2 text-sm"
                   style={{
-                    background: calcResult.valid ? 'rgba(201,168,76,0.05)' : 'rgba(180,40,40,0.08)',
-                    border: calcResult.valid ? '1px solid rgba(201,168,76,0.2)' : '1px solid rgba(220,80,80,0.2)',
-                  }}>
-                  {calcResult.valid ? (
-                    <>
-                      <div className="flex justify-between text-sm mb-2.5">
-                        <span style={{ color: '#7a6a50' }}>Giá niêm yết</span>
-                        <span className="font-medium" style={{ color: '#c8b890' }}>{formatCurrency(product.listed_price)}</span>
-                      </div>
-                      <div className="flex justify-between text-sm mb-2.5">
-                        <span style={{ color: '#7a6a50' }}>Giảm {discountInput}%</span>
-                        <span className="font-medium" style={{ color: '#e06060' }}>- {formatCurrency(calcResult.discountAmount)}</span>
-                      </div>
-                      <div className="flex justify-between items-center pt-3 mt-1"
-                        style={{ borderTop: '1px solid rgba(201,168,76,0.12)' }}>
-                        <span className="font-bold" style={{ color: '#c8b890' }}>Khách thanh toán</span>
-                        <span className="font-bold text-xl" style={{ color: '#c9a84c' }}>{formatCurrency(calcResult.finalPrice)}</span>
-                      </div>
-                      <button
-                        onClick={saveQuotation}
-                        className="w-full mt-4 py-3 rounded-xl font-bold transition-all active:scale-95 flex items-center justify-center gap-2"
-                        style={{
-                          background: 'linear-gradient(135deg, rgba(50,160,80,0.8), rgba(30,120,60,0.8))',
-                          border: '1px solid rgba(80,200,100,0.2)',
-                          color: '#d0f0d8',
-                        }}
-                      >
-                        {quoteSaved ? '✓ Đã lưu báo giá thành công' : 'Lưu báo giá này'}
-                      </button>
-                    </>
-                  ) : (
-                    <div className="text-center py-2">
-                      <p className="font-semibold mb-1" style={{ color: '#e06060' }}>Không hợp lệ</p>
-                      <p className="text-sm" style={{ color: '#a04040' }}>
-                        Mức giảm vượt quá {product.max_discount_percent}% tối đa cho phép.
-                      </p>
-                    </div>
-                  )}
-                </div>
+                    background: 'linear-gradient(135deg, rgba(50,160,80,0.85), rgba(30,120,60,0.85))',
+                    border: '1px solid rgba(80,200,100,0.2)',
+                    color: '#d0f0d8',
+                    boxShadow: '0 4px 16px rgba(50,160,80,0.2)',
+                  }}
+                >
+                  {quoteSaved ? '✓ Đã gửi yêu cầu thành công' : 'Yêu Cầu Kho'}
+                </button>
+              )}
+              {calcResult && !calcResult.valid && (
+                <p className="mt-4 text-center text-xs" style={{ color: '#a04040' }}>
+                  Mức giảm vượt quá {product.max_discount_percent}% tối đa cho phép.
+                </p>
               )}
             </div>
           </div>
