@@ -45,14 +45,14 @@ export default function IPadProductGrid({ category, onProductSelect }: Props) {
 
   return (
     <div className="h-full overflow-y-auto p-3">
-      <div className="grid grid-cols-4 gap-4">
+      <div className="grid grid-cols-4 gap-4 auto-rows-fr">
         {products.map(product => (
           <button
             key={product.id}
             onClick={() => onProductSelect(product)}
-            className="bg-[#fcf9f5] border border-gray-100 rounded-xl overflow-hidden active:scale-95 transition-transform text-left flex flex-col"
+            className="bg-[#fcf9f5] border border-gray-100 rounded-xl overflow-hidden active:scale-95 transition-transform text-left flex flex-col h-full"
           >
-            <div className="w-full aspect-[2.5/1] bg-gray-100 relative">
+            <div className="w-full h-40 bg-gray-100 relative flex-shrink-0">
               {product.thumbnail_url ? (
                 <img
                   src={product.thumbnail_url}
@@ -73,13 +73,9 @@ export default function IPadProductGrid({ category, onProductSelect }: Props) {
               )}
             </div>
             
-            <div className="p-3 flex flex-col flex-1">
-              <h3 className="text-gray-900 font-semibold text-sm leading-tight mb-1 line-clamp-1">{product.name}</h3>
-              {product.description && (
-                <p className="text-gray-500 text-[10px] line-clamp-2 leading-relaxed mb-1.5">
-                  {product.description}
-                </p>
-              )}
+            <div className="p-3 flex flex-col" style={{height: '80px'}}>
+              <h3 className="text-gray-900 font-semibold text-sm leading-tight mb-1 line-clamp-2">{product.name}</h3>
+
               
               <div className="mt-auto flex items-end justify-between">
                 <div></div>
